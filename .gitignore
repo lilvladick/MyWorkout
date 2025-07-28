@@ -1,0 +1,35 @@
+# macOS
+.DS_Store
+
+# Xcode project files and user data
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcuserstate
+project.xcworkspace/
+xcuserdata/
+
+# Build products
+DerivedData/
+build/
+
+# Package managers
+Pods/
+Carthage/
+.swiftpm/
+Package.resolved
+
+# Swift binaries and metadata
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.moved-aside
+*.old
+*.swp
+
+# CocoaPods lock file (optional: if lock file managed separately)
+Podfile.lock
+
+# Other
+*.swp
+*.lock
+
