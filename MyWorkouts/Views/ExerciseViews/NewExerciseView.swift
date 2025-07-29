@@ -7,9 +7,23 @@ struct NewExerciseView: View {
     
     @State private var title: String = ""
     @State private var description: String = ""
+    @State private var emoji: String = "💪"
+    
     var body: some View {
         NavigationStack {
             Form {
+                Section("Workout emoji") {
+                    TextField("💪", text: $emoji)
+                        .font(.largeTitle)
+                        .frame(width: 60)
+                        .multilineTextAlignment(.center)
+                        .keyboardType(.default)
+                        .onChange(of: emoji) { _, newValue in
+                            if newValue.count > 1 {
+                                emoji = String(newValue.prefix(1))
+                            }
+                        }
+                }
                 Section("Exercise name") {
                     TextField("Example: Bench press", text: $title)
                 }
@@ -29,6 +43,7 @@ struct NewExerciseView: View {
                     Button(role: .confirm, action: {
                         saveExercise()
                     })
+                    .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }
         }

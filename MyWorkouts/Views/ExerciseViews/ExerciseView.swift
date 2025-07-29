@@ -10,60 +10,59 @@ enum ExerciseFilter: String, CaseIterable, Identifiable {
 struct ExerciseView: View {
     @State private var filter: ExerciseFilter = .my
     @State private var isShowAddExerciseView: Bool = false
+    @State private var isShowEditView: Bool = false
     
     @Environment(\.modelContext) private var context
     @Query(sort: \Exercise.name) private var myExercises: [Exercise]
     
     var body: some View {
         NavigationStack{
-            List{
-                if filter == .my {
-                    if myExercises.isEmpty {
-                        Text("No exercises yet.").foregroundStyle(.secondary)
+            ScrollView {
+                LazyVStack(spacing: 12) {
+                    if filter == .my {
+                        if myExercises.isEmpty {
+                            Text("No exercises yet.").foregroundStyle(.secondary)
+                        } else {
+                            ForEach(myExercises, id: \.persistentModelID) { exercise in
+                                ExerciseRow(title: exercise.name, description: exercise.descr, emoji: exercise.emoji)
+                            }
+                        }
                     } else {
-                        ForEach(myExercises, id: \.persistentModelID) { exercise in
-                            ExerciseRow(title: exercise.name, description: exercise.descr)
-                        }.onDelete(perform: deleteExercises)
+                        Text("Now it's not working...")
                     }
-                } else {
-                    Text("Now it's not working...")
                 }
+                .padding()
             }
             .navigationTitle("Exercises")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Edit") {
+                        isShowEditView = true
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
+                        Button("Add Exercise", action: { isShowAddExerciseView = true })
                         Picker("Filter", selection: $filter) {
                             ForEach(ExerciseFilter.allCases) { filterOption in
-                                Text(filterOption.rawValue)
-                                    .tag(filterOption)
+                                Text(filterOption.rawValue).tag(filterOption)
                             }
                         }
                     } label: {
-                        Image(systemName: "line.3.horizontal.decrease.circle")
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing){
-                    Button(action: {
-                        isShowAddExerciseView = true
-                    }) {
-                        Image(systemName: "plus")
+                        Image(systemName: "ellipsis.circle")
                     }
                 }
             }
+            .background(Color(.systemGroupedBackground))
             .sheet(isPresented: $isShowAddExerciseView) {
                 NewExerciseView().presentationDetents([.medium])
             }
+            .navigationDestination(isPresented: $isShowEditView) {
+                EditExerciseListView()
+            }
         }
     }
-    
-    private func deleteExercises(at offsets: IndexSet) {
-        for index in offsets {
-            let toDelete = myExercises[index]
-            context.delete(toDelete)
-        }
-        try? context.save()
-    }
+
 }
 
 #Preview {

@@ -24,7 +24,7 @@ struct EditWorkoutExerciseView: View {
 
             Section(header: Text("Sets")) {
                 ForEach(workoutExercise.sets) { set in
-                    Text("Weight: \(set.weight), Repeats: \(set.reps)")
+                    Text("Weight: \(String(format: "%.2f", set.weight)), Repeats: \(set.reps)")
                 }
             }
         }

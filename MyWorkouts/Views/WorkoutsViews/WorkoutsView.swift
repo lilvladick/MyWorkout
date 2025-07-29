@@ -30,6 +30,9 @@ struct WorkoutsView: View {
                 }
             }
             .navigationTitle("All Workouts")
+            .listStyle(.insetGrouped)
+            .scrollContentBackground(.hidden)
+            .background(Color(.systemGroupedBackground))
         }
     }
 }

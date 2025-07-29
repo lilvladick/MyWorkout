@@ -22,6 +22,8 @@ struct TabBarView: View {
                 SearchExerciseView()
             }
         }
+        .tint(Color.indigo)
+        .animation(.easeInOut, value: selectedTabs)
     }
 }
 
