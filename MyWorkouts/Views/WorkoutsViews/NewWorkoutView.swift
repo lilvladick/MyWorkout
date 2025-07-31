@@ -3,6 +3,7 @@ import SwiftUI
 
 struct NewWorkoutView: View {
     @Environment(\.modelContext) private var context
+    @Environment(\.dismiss) private var dismiss
         
     @State private var name: String = ""
     @State private var date: Date = Date()
@@ -49,6 +50,7 @@ struct NewWorkoutView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
                        saveWorkout()
+                        dismiss()
                    }
                    .disabled(name.isEmpty || exercises.isEmpty)
                 }

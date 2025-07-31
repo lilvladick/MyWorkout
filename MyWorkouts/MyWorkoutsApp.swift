@@ -10,6 +10,8 @@ import SwiftData
 
 @main
 struct MyWorkoutsApp: App {
+    @AppStorage("isDarkMode") private var isDarkMode: Bool = false
+    
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Exercise.self,
@@ -28,6 +30,7 @@ struct MyWorkoutsApp: App {
     var body: some Scene {
         WindowGroup {
             TabBarView()
+                .preferredColorScheme(isDarkMode ? .dark : .light)
         }
         .modelContainer(sharedModelContainer)
     }

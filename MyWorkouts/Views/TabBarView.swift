@@ -1,7 +1,7 @@
 import SwiftUI
 
 enum Tabs {
-    case workouts, newWorkout, search, exercise
+    case workouts, settings, search, exercise
 }
 
 struct TabBarView: View {
@@ -12,11 +12,11 @@ struct TabBarView: View {
             Tab("Workouts", systemImage: "list.bullet.rectangle.fill", value: .workouts) {
                 WorkoutsView()
             }
-            Tab("New Workout", systemImage: "plus.square.on.square", value: .newWorkout) {
-                NewWorkoutView()
-            }
             Tab("Exercises", systemImage: "dumbbell", value: .exercise) {
                 ExerciseView()
+            }
+            Tab("Settings", systemImage: "gearshape", value: .settings) {
+                SettingsView()
             }
             Tab(value: .search, role: .search) {
                 SearchExerciseView()

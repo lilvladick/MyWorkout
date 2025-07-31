@@ -2,6 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct EditWorkoutExerciseView: View {
+    @AppStorage("preferredUnit") private var weightUnit: String = "kg"
     @Bindable var workoutExercise: WorkoutExercise
     @State private var weight: String = ""
     @State private var reps: String = ""
@@ -24,7 +25,7 @@ struct EditWorkoutExerciseView: View {
 
             Section(header: Text("Sets")) {
                 ForEach(workoutExercise.sets) { set in
-                    Text("Weight: \(String(format: "%.2f", set.weight)), Repeats: \(set.reps)")
+                    Text("Weight: \(String(format: "%.2f", set.weight)) \(weightUnit), Repeats: \(set.reps)")
                 }
             }
         }
