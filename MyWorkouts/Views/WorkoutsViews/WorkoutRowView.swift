@@ -1,13 +1,19 @@
 import SwiftUI
 
-struct ExerciseRowView: View {
+struct WorkoutRowView: View {
     let title: String
-    let description: String?
-    let emoji: String
+    let date: Date
+    
+    private var formattedDate: String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
+    }
     
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            Text(emoji)
+            Text("🥇")
                 .font(.system(size: 35))
                 .frame(width: 50, height: 50)
                 .background(
@@ -25,13 +31,11 @@ struct ExerciseRowView: View {
                     .font(.headline)
                     .foregroundColor(.primary)
                 
-                if let desc = description, !desc.isEmpty {
-                    Text(desc)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .lineLimit(2)
-                        .truncationMode(.tail)
-                }
+                Text(formattedDate)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .lineLimit(2)
+                    .truncationMode(.tail)
             }
             Spacer()
         }
@@ -46,8 +50,6 @@ struct ExerciseRowView: View {
 }
 
 #Preview {
-    VStack(spacing: 10) {
-        ExerciseRowView(title: "Bench Press", description: "Chest, triceps and shoulders", emoji: "🏋️‍♂️")
-        ExerciseRowView(title: "Squats", description: "Legs and glutes", emoji: "🦵")
-    }
+    WorkoutRowView(title: "Legs day", date: Date())
+    WorkoutRowView(title: "Not Legs day", date: Date())
 }

@@ -9,30 +9,19 @@ struct WorkoutsView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(workouts) { workout in
-                    NavigationLink {
-                        WorkoutDetailsView(workout: workout)
-                    } label: {
-                        VStack(alignment: .leading) {
-                            Text(workout.name)
-                                .font(.headline)
-                            Text(workout.date.formatted(date: .abbreviated, time: .omitted))
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
+            ScrollView {
+                LazyVStack(spacing: 12) {
+                    ForEach(workouts, id: \.persistentModelID) { workout in
+                        NavigationLink {
+                            WorkoutDetailsView(workout: workout)
+                        } label: {
+                            WorkoutRowView(title: workout.title, date: workout.date)
                         }
                     }
                 }
-                .onDelete { indexSet in
-                    for index in indexSet {
-                        let workout = workouts[index]
-                        context.delete(workout)
-                    }
-                    try? context.save()
-                }
+                .padding()
             }
             .navigationTitle("All Workouts")
-            .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
             .background(Color(.systemGroupedBackground))
             .toolbar {

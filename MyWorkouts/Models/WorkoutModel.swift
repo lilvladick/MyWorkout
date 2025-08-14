@@ -5,11 +5,11 @@ import Foundation
 @Model
 class Workout {
     var date: Date
-    var name: String
+    var title: String
     @Relationship(deleteRule: .cascade) var exercises: [WorkoutExercise] = []
 
-    init(date: Date, name: String) {
+    init(date: Date, title: String) {
         self.date = date
-        self.name = name
+        self.title = title
     }
 }

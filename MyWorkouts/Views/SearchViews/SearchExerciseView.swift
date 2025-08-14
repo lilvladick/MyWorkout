@@ -9,14 +9,14 @@ struct SearchExerciseView: View {
         if searchText.isEmpty {
             return allTemplates
         } else {
-            return allTemplates.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+            return allTemplates.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
         }
     }
     
     var body: some View {
         NavigationStack {
             List(filteredTemplates) { template in
-                Text(template.name)
+                Text(template.title)
             }
             .navigationTitle("Search Exercise")
             .searchable(text: $searchText, prompt: "Exercise search")

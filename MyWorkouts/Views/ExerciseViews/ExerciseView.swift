@@ -1,34 +1,19 @@
 import SwiftUI
 import SwiftData
 
-enum ExerciseFilter: String, CaseIterable, Identifiable {
-    case my = "My Exercises"
-    case all = "All Exercises"
-    var id: String { rawValue }
-}
-
 struct ExerciseView: View {
-    @State private var filter: ExerciseFilter = .my
     @State private var isShowAddExerciseView: Bool = false
     @State private var isShowEditView: Bool = false
     
     @Environment(\.modelContext) private var context
-    @Query(sort: \Exercise.name) private var myExercises: [Exercise]
+    @Query(sort: \Exercise.title) private var myExercises: [Exercise]
     
     var body: some View {
         NavigationStack{
             ScrollView {
                 LazyVStack(spacing: 12) {
-                    if filter == .my {
-                        if myExercises.isEmpty {
-                            Text("No exercises yet.").foregroundStyle(.secondary)
-                        } else {
-                            ForEach(myExercises, id: \.persistentModelID) { exercise in
-                                ExerciseRow(title: exercise.name, description: exercise.descr, emoji: exercise.emoji)
-                            }
-                        }
-                    } else {
-                        Text("Now it's not working...")
+                    ForEach(myExercises, id: \.persistentModelID) { exercise in
+                        ExerciseRowView(title: exercise.title, description: exercise.descr, emoji: exercise.emoji)
                     }
                 }
                 .padding()
@@ -41,16 +26,11 @@ struct ExerciseView: View {
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Menu {
-                        Button("Add Exercise", action: { isShowAddExerciseView = true })
-                        Picker("Filter", selection: $filter) {
-                            ForEach(ExerciseFilter.allCases) { filterOption in
-                                Text(filterOption.rawValue).tag(filterOption)
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "ellipsis.circle")
-                    }
+                    Button(action: {
+                        isShowAddExerciseView = true
+                    }, label: {
+                        Image(systemName: "plus")
+                    })
                 }
             }
             .background(Color(.systemGroupedBackground))

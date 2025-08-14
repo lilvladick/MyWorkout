@@ -5,7 +5,7 @@ struct NewWorkoutView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
         
-    @State private var name: String = ""
+    @State private var title: String = ""
     @State private var date: Date = Date()
     @State private var exercises: [WorkoutExercise] = []
     
@@ -13,7 +13,7 @@ struct NewWorkoutView: View {
         NavigationStack {
             Form {
                 Section(header: Text("Workout Information")) {
-                    TextField("Title", text: $name)
+                    TextField("Title", text: $title)
                     DatePicker("Date", selection: $date, displayedComponents: .date)
                 }
 
@@ -27,16 +27,21 @@ struct NewWorkoutView: View {
                         NavigationLink {
                             EditWorkoutExerciseView(workoutExercise: workoutExercise)
                         } label: {
-                            Text(workoutExercise.template.name)
+                            Text(workoutExercise.template.title)
                         }
                     }
                     .onDelete(perform: deleteExercise)
 
                     NavigationLink("Add Exercise") {
-                        AddExerciseTemplateView { template in
-                            let newExercise = WorkoutExercise(template: template)
-                            exercises.append(newExercise)
-                        }
+                        AddExerciseTemplateView(
+                            selectedExercises: Binding(
+                                get: { exercises.map { $0.template } },
+                                set: { newTemplates in
+                                    exercises = newTemplates.map { WorkoutExercise(template: $0) }
+                                }
+                            )
+                        )
+                        
                     }
                 }
             }
@@ -45,17 +50,14 @@ struct NewWorkoutView: View {
                     Button("Clear") {
                         clearForm()
                     }
-                    .disabled(name.isEmpty && exercises.isEmpty)
+                    .disabled(title.isEmpty && exercises.isEmpty)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
                        saveWorkout()
                         dismiss()
                    }
-                   .disabled(name.isEmpty || exercises.isEmpty)
-                }
-                ToolbarItem(placement: .automatic) {
-                    EditButton()
+                   .disabled(title.isEmpty || exercises.isEmpty)
                 }
             }
         }
@@ -66,7 +68,7 @@ struct NewWorkoutView: View {
     }
 
     private func saveWorkout() {
-        let workout = Workout(date: date, name: name)
+        let workout = Workout(date: date, title: title)
         workout.exercises = exercises
 
         context.insert(workout)
@@ -80,7 +82,7 @@ struct NewWorkoutView: View {
     }
 
     private func clearForm() {
-        name = ""
+        title = ""
         date = Date()
         exercises = []
     }

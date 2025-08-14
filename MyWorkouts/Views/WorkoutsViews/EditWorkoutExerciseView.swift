@@ -29,6 +29,6 @@ struct EditWorkoutExerciseView: View {
                 }
             }
         }
-        .navigationTitle(workoutExercise.template.name)
+        .navigationTitle(workoutExercise.template.title)
     }
 }

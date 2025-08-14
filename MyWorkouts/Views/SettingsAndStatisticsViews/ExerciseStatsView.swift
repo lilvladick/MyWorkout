@@ -50,7 +50,7 @@ struct ExerciseStatsView: View {
                 }
                 .padding()
             }
-            .navigationTitle(exercise.template.name)
+            .navigationTitle(exercise.template.title)
             .presentationDetents([.large])
         }
     }

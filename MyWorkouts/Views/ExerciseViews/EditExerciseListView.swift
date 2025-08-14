@@ -4,14 +4,14 @@ import SwiftUI
 struct EditExerciseListView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
-    @Query(sort: \Exercise.name) private var myExercises: [Exercise]
+    @Query(sort: \Exercise.title) private var myExercises: [Exercise]
 
     var body: some View {
         NavigationStack {
             List {
                 ForEach(myExercises, id: \.persistentModelID) { exercise in
                     VStack(alignment: .leading) {
-                        Text(exercise.name).bold()
+                        Text(exercise.title).bold()
                         if let descr = exercise.descr, !descr.isEmpty {
                             Text(descr)
                                 .font(.subheadline)

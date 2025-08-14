@@ -11,7 +11,7 @@ struct ExerciseListView: View {
                 Button {
                     selectedExercise = exercise
                 } label: {
-                    Text(exercise.template.name)
+                    Text(exercise.template.title)
                 }
             }
         }

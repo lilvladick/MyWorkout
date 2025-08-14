@@ -7,7 +7,7 @@ struct WorkoutDetailsView: View {
     var body: some View {
         Form {
             Section(header: Text("Info")) {
-                TextField("Title", text: $workout.name)
+                TextField("Title", text: $workout.title)
                 DatePicker("Date", selection: $workout.date, displayedComponents: .date)
             }
 
@@ -16,7 +16,7 @@ struct WorkoutDetailsView: View {
                     NavigationLink {
                         EditWorkoutExerciseView(workoutExercise: exercise)
                     } label: {
-                        Text(exercise.template.name)
+                        Text(exercise.template.title)
                     }
                 }
             }

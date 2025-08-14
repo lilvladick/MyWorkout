@@ -50,7 +50,7 @@ struct NewExerciseView: View {
     }
     
     private func saveExercise() {
-        let exercise = Exercise(name: title, descr: description.isEmpty ? nil : description, emoji: emoji)
+        let exercise = Exercise(title: title, descr: description.isEmpty ? nil : description, emoji: emoji)
         modelContext.insert(exercise)
         dismiss()
     }
