@@ -7,6 +7,8 @@ struct NewWorkoutView: View {
         
     @State private var title: String = ""
     @State private var date: Date = Date()
+    @State private var startTime: Date = Date()
+    @State private var endTime: Date = Date()
     @State private var exercises: [WorkoutExercise] = []
     
     var body: some View {
@@ -15,6 +17,11 @@ struct NewWorkoutView: View {
                 Section(header: Text("Workout Information")) {
                     TextField("Title", text: $title)
                     DatePicker("Date", selection: $date, displayedComponents: .date)
+                }
+                
+                Section(header: Text("Workout Time")) {
+                    DatePicker("Start Time", selection: $startTime, displayedComponents: [.hourAndMinute])
+                    DatePicker("End Time", selection: $endTime, displayedComponents: [.hourAndMinute])
                 }
 
                 Section(header: Text("Exercises")) {
@@ -68,7 +75,7 @@ struct NewWorkoutView: View {
     }
 
     private func saveWorkout() {
-        let workout = Workout(date: date, title: title)
+        let workout = Workout(date: date, title: title, startTime: startTime, endTime: endTime)
         workout.exercises = exercises
 
         context.insert(workout)
