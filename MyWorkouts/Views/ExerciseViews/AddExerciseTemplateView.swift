@@ -2,22 +2,24 @@ import SwiftData
 import SwiftUI
 
 struct AddExerciseTemplateView: View {
-    @Query private var Exercises: [Exercise]
-    
-    @Binding var selectedExercises: [Exercise]
-    
     @Environment(\.dismiss) private var dismiss
+    
+    @StateObject var viewModel: AddExerciseTemplateViewModel
+    
+    init(viewModel: AddExerciseTemplateViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
     
     var body: some View {
         List {
-            ForEach(Exercises, id: \.persistentModelID) { exercise in
+            ForEach(viewModel.exercises, id: \.persistentModelID) { exercise in
                 Button {
-                    toggleSelection(exercise)
+                    viewModel.toggleSelection(exercise)
                 } label: {
                     HStack {
                         Text(exercise.title)
                         Spacer()
-                        if selectedExercises.contains(where: { $0.persistentModelID == exercise.persistentModelID }) {
+                        if viewModel.selectedExercises.contains(where: { $0.persistentModelID == exercise.persistentModelID }) {
                             Image(systemName: "checkmark")
                                 .foregroundColor(.accentColor)
                         }
@@ -29,17 +31,10 @@ struct AddExerciseTemplateView: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Done") {
+                    viewModel.done()
                     dismiss()
                 }
             }
-        }
-    }
-    
-    private func toggleSelection(_ exercise: Exercise) {
-        if let index = selectedExercises.firstIndex(where: { $0.persistentModelID == exercise.persistentModelID }) {
-            selectedExercises.remove(at: index)
-        } else {
-            selectedExercises.append(exercise)
         }
     }
 }

@@ -6,13 +6,18 @@ struct ExerciseView: View {
     @State private var isShowEditView: Bool = false
     
     @Environment(\.modelContext) private var context
-    @Query(sort: \Exercise.title) private var myExercises: [Exercise]
     
+    @StateObject private var viewModel: ExerciseViewModel
+    
+    init(context: ModelContext) {
+        _viewModel = StateObject(wrappedValue: ExerciseViewModel(context: context))
+    }
+
     var body: some View {
         NavigationStack{
             ScrollView {
                 LazyVStack(spacing: 12) {
-                    ForEach(myExercises, id: \.persistentModelID) { exercise in
+                    ForEach(viewModel.exercises, id: \.persistentModelID) { exercise in
                         ExerciseRowView(title: exercise.title, description: exercise.descr, emoji: exercise.emoji)
                     }
                 }
@@ -35,16 +40,27 @@ struct ExerciseView: View {
             }
             .background(Color(.systemGroupedBackground))
             .sheet(isPresented: $isShowAddExerciseView) {
-                NewExerciseView().presentationDetents([.medium])
+                let newVM = NewExerciseViewModel(
+                    context: viewModel.context,
+                    onDone: {
+                        viewModel.fetchExercises()
+                    }
+                )
+                NewExerciseView(viewModel: newVM)
+                    .presentationDetents([.medium])
             }
+
             .navigationDestination(isPresented: $isShowEditView) {
-                EditExerciseListView()
+                let editVM = EditExerciseListViewModel(
+                    context: viewModel.context,
+                    onDone: {
+                        viewModel.fetchExercises()
+                    }
+                )
+                EditExerciseListView(viewModel: editVM)
             }
         }
     }
 
 }
 
-#Preview {
-    ExerciseView()
-}

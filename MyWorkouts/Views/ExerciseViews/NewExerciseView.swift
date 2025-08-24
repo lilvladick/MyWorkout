@@ -2,33 +2,30 @@ import SwiftUI
 import SwiftData
 
 struct NewExerciseView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Environment(\.dismiss) private var dismiss
     
-    @State private var title: String = ""
-    @State private var description: String = ""
-    @State private var emoji: String = "💪"
+    @Environment(\.dismiss) private var dismiss
+    @StateObject var viewModel: NewExerciseViewModel
     
     var body: some View {
         NavigationStack {
             Form {
                 Section("Workout emoji") {
-                    TextField("💪", text: $emoji)
+                    TextField("💪", text: $viewModel.emoji)
                         .font(.largeTitle)
                         .frame(width: 60)
                         .multilineTextAlignment(.center)
                         .keyboardType(.default)
-                        .onChange(of: emoji) { _, newValue in
+                        .onChange(of: viewModel.emoji) { _, newValue in
                             if newValue.count > 1 {
-                                emoji = String(newValue.prefix(1))
+                                viewModel.emoji = String(newValue.prefix(1))
                             }
                         }
                 }
                 Section("Exercise name") {
-                    TextField("Example: Bench press", text: $title)
+                    TextField("Example: Bench press", text: $viewModel.title)
                 }
                 Section("Description (Optional)") {
-                    TextField("Enter description", text: $description)
+                    TextField("Enter description", text: $viewModel.description)
                 }
                 
             }
@@ -41,21 +38,12 @@ struct NewExerciseView: View {
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(role: .confirm, action: {
-                        saveExercise()
+                        viewModel.saveExercise()
+                        dismiss()
                     })
-                    .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty)
+                    .disabled(viewModel.title.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }
         }
     }
-    
-    private func saveExercise() {
-        let exercise = Exercise(title: title, descr: description.isEmpty ? nil : description, emoji: emoji)
-        modelContext.insert(exercise)
-        dismiss()
-    }
-}
-
-#Preview {
-    NewExerciseView()
 }

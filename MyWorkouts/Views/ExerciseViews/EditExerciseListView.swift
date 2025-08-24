@@ -3,13 +3,13 @@ import SwiftUI
 
 struct EditExerciseListView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.modelContext) private var context
-    @Query(sort: \Exercise.title) private var myExercises: [Exercise]
+    
+    @StateObject var viewModel: EditExerciseListViewModel
 
     var body: some View {
         NavigationStack {
             List {
-                ForEach(myExercises, id: \.persistentModelID) { exercise in
+                ForEach(viewModel.exercises, id: \.persistentModelID) { exercise in
                     VStack(alignment: .leading) {
                         Text(exercise.title).bold()
                         if let descr = exercise.descr, !descr.isEmpty {
@@ -19,7 +19,7 @@ struct EditExerciseListView: View {
                         }
                     }
                 }
-                .onDelete(perform: delete)
+                .onDelete(perform: viewModel.delete)
             }
             .navigationTitle("Edit Exercises")
             .toolbar {
@@ -30,14 +30,6 @@ struct EditExerciseListView: View {
                 }
             }
         }
-    }
-
-    private func delete(at offsets: IndexSet) {
-        for index in offsets {
-            let exercise = myExercises[index]
-            context.delete(exercise)
-        }
-        try? context.save()
     }
 }
 

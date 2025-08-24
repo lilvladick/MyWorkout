@@ -5,6 +5,7 @@ enum Tabs {
 }
 
 struct TabBarView: View {
+    @Environment(\.modelContext) private var context
     @State var selectedTabs: Tabs = .workouts
     
     var body: some View {
@@ -13,7 +14,7 @@ struct TabBarView: View {
                 WorkoutsView()
             }
             Tab("Exercises", systemImage: "dumbbell", value: .exercise) {
-                ExerciseView()
+                ExerciseView(context: context)
             }
             Tab("Settings", systemImage: "gearshape", value: .settings) {
                 SettingsView()
