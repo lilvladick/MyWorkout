@@ -26,13 +26,12 @@ It works entirely offline, stores data locally using SwiftData, and is built on 
 
 ## Features
 
-- 🏋Create a list of exercises (any type)
+- Create a list of exercises (any type)
 - Record sets, reps, and loads
 - View complete training history
 - Quick workout creation
 - Modern SwiftUI interface
 - Local storage with **SwiftData**
-- 100% offline mode
 
 ---
 
