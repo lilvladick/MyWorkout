@@ -23,6 +23,7 @@ struct TabBarView: View {
                 SearchExerciseView()
             }
         }
+        .tabBarMinimizeBehavior(.onScrollDown)
         .tint(Color.indigo)
         .animation(.easeInOut, value: selectedTabs)
     }
